@@ -16,46 +16,50 @@ var gmcpArea = "";
 
 var targetList = {};
 
+var roomContent = {};
+
 var kecho = function(text){
    client.display_notice("keneanung", "green", "black");
    client.display_notice(": " + text, "white", "black");
-}
+};
 
 var idOnly = function(list){
 
-   var ids = []
+   var ids = [];
    for(var i = 0; i<list.length; i++){
       ids.push(list[i].id);
    }
    return ids;
-}
+};
 
 var save = function(){
    //TODO
-}
+};
 
 var addTarget = function(item){
    //TODO
-}
+};
 
-var emitEventIfChanged = function(before, after){
+var emitEventsIfChanged = function(before, after){
    //TODO
    client.display_notice("event");
-}
+};
 
 var module = {};
 
 module.setArea = function(areaName){
    gmcpArea = areaName;
-}
+};
 
 module.addPossibleTarget = function(targetName){
+   var prios = config.prios;
+
    if(!prios[gmcpArea]){
       prios[gmcpArea] = [];
       kecho("Added '" + targetName + "' as new area.");
    }
 
-   if(!$.inArray(targetName, prios[targetName]){
+   if(!$.inArray(targetName, prios[targetName])){
       var before = idOnly(targetList);
 
       prios[gmcpArea].push(targetName);
@@ -72,10 +76,10 @@ module.addPossibleTarget = function(targetName){
 
       emitEventsIfChanged(before, after);
    }
-}
+};
 
 return module;
 
-}())
+}());
 return root;
 }(keneanung || {}));
