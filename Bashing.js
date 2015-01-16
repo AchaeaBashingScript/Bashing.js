@@ -81,5 +81,5 @@ module.addPossibleTarget = function(targetName){
 return module;
 
 }());
-return root;
+return keneanung;
 }(keneanung || {}));
