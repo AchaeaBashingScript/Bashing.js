@@ -9,7 +9,7 @@ var config = {
    autoraze: false,
    razecommand: "none",
    attackcommand: "kill",
-   prios = {}
+   prios: {}
 };
 
 var gmcpArea = "";
