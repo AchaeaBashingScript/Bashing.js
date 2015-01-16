@@ -56,10 +56,10 @@ module.addPossibleTarget = function(targetName){
 
    if(!prios[gmcpArea]){
       prios[gmcpArea] = [];
-      kecho("Added '" + targetName + "' as new area.");
+      kecho("Added '" + gmcpArea + "' as new area.");
    }
 
-   if(!$.inArray(targetName, prios[targetName])){
+   if(!$.inArray(targetName, prios[gmcpArea])){
       var before = idOnly(targetList);
 
       prios[gmcpArea].push(targetName);
