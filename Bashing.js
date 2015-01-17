@@ -19,8 +19,7 @@ var targetList = {};
 var roomContent = {};
 
 var kecho = function(text){
-   client.display_notice("keneanung", "green", "black");
-   client.display_notice(": " + text, "white", "black");
+   console.log(text);
 };
 
 var idOnly = function(list){
@@ -42,7 +41,7 @@ var addTarget = function(item){
 
 var emitEventsIfChanged = function(before, after){
    //TODO
-   client.display_notice("event");
+   console.log("event");
 };
 
 var module = {};
