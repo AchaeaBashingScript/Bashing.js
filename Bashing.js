@@ -22,6 +22,8 @@ var roomContent = [];
 var attacking = -1;
 
 var kecho = function(text){
+   client.ow_Write("#output_main", "<p><span style='color: forestgreen'>keneanung</span>:"
+      + text + "</p>");
    console.log(text);
 };
 
