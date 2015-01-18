@@ -154,7 +154,7 @@ var displayTargetList = function(){
    for(var i = 0; i < targetList.length; i++) {
       client.ow_Write("#output_main",
           "<span style='color: orange; white-space: pre-wrap'>     "
-          + targetList[i] + "</span>");
+          + targetList[i].name + "</span>");
    }
    console.log(targetList);
 };
