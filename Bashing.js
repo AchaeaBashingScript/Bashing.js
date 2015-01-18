@@ -135,10 +135,16 @@ var difference = function(list1, list2){
    return false;
 };
 
+var displayTargetList = function(){
+   kecho("new target list:");
+   console.log(targetList);
+};
+
 var emitEventsIfChanged = function(before, after){
    console.log("event");
    if(difference(before, after)){
       run_function("keneanungBashingTargetListChanged", after, "ALL");
+      displayTargetList();
       if(before[0] != after[0]){
          run_function("keneanungBashingTargetListFirstChanged", after[0], "ALL");
       }
