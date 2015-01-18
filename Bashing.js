@@ -37,6 +37,12 @@ var save = function(){
    //var configString = JSON.stringify(config);
    if(!client.set_variable("keneanung.bashing.config", config)){
       kecho("Couldn't save settings!");
+   }else{
+      //make sure the changes get uploaded to IRE...
+      set_system_vals();
+      system_changed = false;
+      client.system_changed = false;
+      client.gmcp_save_system();
    }
 };
 
