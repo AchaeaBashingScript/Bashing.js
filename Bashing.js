@@ -47,7 +47,7 @@ var save = function(){
 };
 
 var getPrio = function(item){
-   var prios = config.prios;
+   var prios = config.prios[gmcpArea];
    for(var i = 0; i < prios.length; i++){
       if(item == prios[i]){
          return i;
@@ -59,7 +59,7 @@ var getPrio = function(item){
 var addTarget = function(item){
    var insertAt;
 
-   var targetPrio = getPrio(item);
+   var targetPrio = getPrio(item.name);
 
    if(targetPrio == -1){
       return;
@@ -83,7 +83,7 @@ var addTarget = function(item){
 
       while(iStart <= iEnd){
          iMid = Math.floor( (iStart + iEnd)/2 );
-         var existingPrio = getPrio(targetList[iMid]);
+         var existingPrio = getPrio(targetList[iMid].name);
 
          if(targetPrio == existingPrio){
             insertAt = iMid;
