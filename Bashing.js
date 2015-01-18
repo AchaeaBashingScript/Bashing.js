@@ -39,10 +39,16 @@ var save = function(){
       kecho("Couldn't save settings!");
    }else{
       //make sure the changes get uploaded to IRE...
-      set_system_vals();
-      system_changed = false;
-      client.system_changed = false;
-      client.gmcp_save_system();
+      if(client.settings_window) {
+         client.settings_window.set_system_vals();
+         client.settings_window.system_changed = false;
+         client.system_changed = false;
+         client.gmcp_save_system();
+      }else{
+         kecho("No settings window open. Please open it " +
+         "(cogwheels lower right side) and click on 'Save " +
+         "Client Settings' to keep your config.");
+      }
    }
 };
 
