@@ -2,7 +2,7 @@ var keneanung = (function(keneanung){
 keneanung.bashing = (function(){
 
 var config = {
-   enabled: false,
+   enabled: true,
    warning: 500,
    fleeing: 300,
    autoflee: true,
