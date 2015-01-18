@@ -152,7 +152,9 @@ var difference = function(list1, list2){
 var displayTargetList = function(){
    kecho("Current target list:");
    for(var i = 0; i < targetList.length; i++) {
-      client.ow_Write("<span style='color: orange; white-space: pre-wrap'>    " + targetList[i] + "</span>");
+      client.ow_Write("#output_main",
+          "<span style='color: orange; white-space: pre-wrap'>     "
+          + targetList[i] + "</span>");
    }
    console.log(targetList);
 };
