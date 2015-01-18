@@ -53,7 +53,7 @@ var save = function(){
 };
 
 var getPrio = function(item){
-   var prios = config.prios[gmcpArea];
+   var prios = config.prios[gmcpArea] || [];
    for(var i = 0; i < prios.length; i++){
       if(item == prios[i]){
          return i;
