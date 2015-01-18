@@ -22,7 +22,7 @@ var roomContent = [];
 var attacking = -1;
 
 var kecho = function(text){
-   client.ow_Write("#output_main", "<p><span style='color: forestgreen'>keneanung</span>:"
+   client.ow_Write("#output_main", "<p><span style='color: forestgreen'>keneanung</span>: "
       + text + "</p>");
    console.log(text);
 };
@@ -38,7 +38,7 @@ var idOnly = function(list){
 var save = function(){
    //var configString = JSON.stringify(config);
    if(!client.set_variable("keneanung.bashing.config", config)){
-      kecho("Couldn't save settings!");
+      kecho("<span style='color: red'>Couldn't save settings!</span>");
    }else{
       //make sure the changes get uploaded to IRE...
       if(client.settings_window) {
@@ -47,9 +47,9 @@ var save = function(){
          client.system_changed = false;
          client.gmcp_save_system();
       }else{
-         kecho("No settings window open. Please open it " +
+         kecho("<span style='color: yellow'>No settings window open. Please open it " +
          "(cogwheels lower right side) and click on 'Save " +
-         "Client Settings' to keep your config.");
+         "Client Settings' to keep your config.</span>");
       }
    }
 };
@@ -150,7 +150,10 @@ var difference = function(list1, list2){
 };
 
 var displayTargetList = function(){
-   kecho("new target list:");
+   kecho("Current target list:");
+   for(var i = 0; i < targetList.length; i++) {
+      client.ow_Write("<span style='color: orange; white-space: pre-wrap'>    " + targetList[i] + "</span>");
+   }
    console.log(targetList);
 };
 
