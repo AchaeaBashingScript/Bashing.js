@@ -52,11 +52,11 @@ var linkify = function(text, codeToRun, alt){
    a.text(text);
    a.attr('onclick', codeToRun + ";return false;");
    a.attr('title', alt);
-   return a;
+   return a.prop("outerHTML");
 };
 
 var kecho = function(text){
-   var toEcho = "<p>##forestgreen##'keneanung##reset: " + text + "</p>";
+   var toEcho = "<p>##forestgreen##keneanung##reset##: " + text + "</p>";
    var colouredEcho = colorify(toEcho);
    client.ow_Write("#output_main", colouredEcho);
    console.log(text);
