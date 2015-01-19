@@ -21,9 +21,44 @@ var roomContent = [];
 
 var attacking = -1;
 
+var colorify = function(str){
+   var pattern = /##(\w+)##/;
+   var first = true;
+   var match;
+   while (match = pattern.exec(str)) {
+      var repl;
+      if(first && match[1] == "reset"){
+         //skip a reset as the first tag...
+      }else if(match[1] == "reset"){
+         repl = "</span>";
+         first = true;
+      }else if(first){
+         repl = '<span style="color: ' + match[1] + '">';
+         first = false;
+      }else{
+         repl = '</span><span style="color: ' + match[1] + '">';
+      }
+      str = str.replace(pattern, repl);
+   }
+   if(!first){
+      str += "</span>";
+   }
+   return str;
+};
+
+var linkify = function(text, codeToRun, alt){
+   var a = $('<a />');
+   a.attr('href',"javascript:void(0);");
+   a.text(text);
+   a.attr('onclick', codeToRun + ";return false;");
+   a.attr('title', alt);
+   return a;
+};
+
 var kecho = function(text){
-   client.ow_Write("#output_main", "<p><span style='color: forestgreen'>keneanung</span>: "
-      + text + "</p>");
+   var toEcho = "<p>##forestgreen##'keneanung##reset: " + text + "</p>";
+   var colouredEcho = colorify(toEcho);
+   client.ow_Write("#output_main", colouredEcho);
    console.log(text);
 };
 
@@ -38,7 +73,7 @@ var idOnly = function(list){
 var save = function(){
    //var configString = JSON.stringify(config);
    if(!client.set_variable("keneanung.bashing.config", config)){
-      kecho("<span style='color: red'>Couldn't save settings!</span>");
+      kecho("##red##Couldn't save settings!");
    }else{
       //make sure the changes get uploaded to IRE...
       if(client.settings_window) {
@@ -47,9 +82,9 @@ var save = function(){
          client.system_changed = false;
          client.gmcp_save_system();
       }else{
-         kecho("<span style='color: yellow'>No settings window open. Please open it " +
+         kecho("##yellow##No settings window open. Please open it " +
          "(cogwheels lower right side) and click on 'Save " +
-         "Client Settings' to keep your config.</span>");
+         "Client Settings' to keep your config.");
       }
    }
 };
@@ -291,6 +326,10 @@ module.ItemListCallback = function(arg){
    }
 
    emitEventsIfChanged(before,  after);
+};
+
+module.showConfig = function(){
+   kecho(linkify("works!", "keneanung.bashing.showConfig()", "show the config"));
 };
 
 return module;
