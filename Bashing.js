@@ -329,7 +329,63 @@ module.ItemListCallback = function(arg){
 };
 
 module.showConfig = function(){
-   kecho(linkify("works!", "keneanung.bashing.showConfig()", "show the config"));
+   var content = $("<div />");
+   var selectEnabled = $("<select />", {name: "enabled", class: "bashingSelect"});
+   var vals = ["on","off"];
+   for(var i = 0; i < vals.length; i++){
+      var opt = $("<option />", {value : vals[i], text : vals[i]});
+      if((vals[i] == "on") == config.enabled){
+         opt.attr("selected", "selected");
+      }
+      selectEnabled.append(opt);
+   }
+   $("<span />").text("The basher is currently ").append(selectEnabled).appendTo(content);
+   $("<br />").appendTo(content);
+   
+   var selectFlee = $("<select />", {name: "autoflee", class: "bashingSelect"});
+   for(var i = 0; i < vals.length; i++){
+      var opt = $("<option />", {value : vals[i], text : vals[i]});
+      if((vals[i] == "on") == config.autoflee){
+         opt.attr("selected", "selected");
+      }
+      selectFlee.append(opt);
+   }
+   $("<span />").text("Autofleeing is currently ").append(selectFlee).appendTo(content);
+   $("<br />").appendTo(content);
+   
+   $("<span />").text("Issueing a warning at ").append($("<input />", {value: config.warning, name: "warning", class: "bashingInput"})).appendTo(content);
+   $("<br />").appendTo(content);
+   $("<span />").text("Fleeing at ").append($("<input />", {value: config.fleeing, name: "fleeing", class: "bashingInput"})).appendTo(content);
+   $("<br />").appendTo(content);
+
+   var selectRaze = $("<select />", {name: "autoraze", class: "bashingSelect"});
+   for(var i = 0; i < vals.length; i++){
+      var opt = $("<option />", {value : vals[i], text : vals[i]});
+      if((vals[i] == "on") == config.autoraze){
+         opt.attr("selected", "selected");
+      }
+      selectRaze.append(opt);
+   }
+   $("<span />").text("Autoraze is currently ").append(selectRaze).appendTo(content);
+   $("<br />").appendTo(content);
+   $("<span />").text("Using this command for razing: ").append($("<input />", {value: config.razecommand, name: "razecommand", class: "bashingInput"})).appendTo(content);
+   $("<br />").appendTo(content);
+   $("<span />").text("Using this command for attacking: ").append($("<input />", {value: config.attackcommand, name: "attackcommand", class: "bashingInput"})).appendTo(content);
+   $("<br />").appendTo(content);
+   $("<br />").appendTo(content);
+   $("<button />", {text: "save"}).on("click", function(){
+      var conf = {};
+      $(".bashingInput").each(function(_, elem){
+         conf[elem.name] = elem.value;
+      });
+      $(".bashingSelect").each(function(_, elem){
+         conf[elem.name] = elem[elem.selectedIndex].value == "on";
+      });
+      config = conf
+      save();
+   }).appendTo(content);
+
+   client.cm_dialog("#", {title: "Bashing configuration", content: content.outerHTML});
 };
 
 return module;
