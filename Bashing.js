@@ -385,7 +385,7 @@ module.showConfig = function(){
       save();
    }).appendTo(content);
 
-   client.cm_dialog("#", {title: "Bashing configuration", content: content.outerHTML});
+   client.cm_dialog("#", {title: "Bashing configuration", content: content[0].outerHTML});
 };
 
 return module;
