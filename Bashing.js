@@ -375,24 +375,24 @@ module.showConfig = function(){
    $("<br />").appendTo(content);
    $("<button />", {text: "save", class: "ui-state-default ui-corner-all", id: "keneanung-bashing-save"}).appendTo(content);
 
-   $(document).on("click", "#keneanung-bashing-save", function(){
-      var conf = {};
-      $(".bashingInput").each(function(_, elem){
-         conf[elem.name] = elem.value;
-      });
-      $(".bashingSelect").each(function(_, elem){
-         conf[elem.name] = elem[elem.selectedIndex].value == "on";
-      });
-      for(var key in conf){
-         if(conf.hasOwnProperty(key)) continue;
-         config[key] = conf[key];
-      }
-      save();
-      $(".ui-dialog-titlebar-close").trigger("click");
-   });
-
    client.cm_dialog("#", {title: "Bashing configuration", content: content[0].outerHTML});
 };
+
+$(document).on("click", "#keneanung-bashing-save", function () {
+   var conf = {};
+   $(".bashingInput").each(function (_, elem) {
+      conf[elem.name] = elem.value;
+   });
+   $(".bashingSelect").each(function (_, elem) {
+      conf[elem.name] = elem[elem.selectedIndex].value == "on";
+   });
+   for (var key in conf) {
+      if (!conf.hasOwnProperty(key)) continue;
+      config[key] = conf[key];
+   }
+   save();
+   $(".ui-dialog-titlebar-close").trigger("click");
+});
 
 return module;
 
