@@ -330,7 +330,7 @@ module.ItemListCallback = function(arg){
 
 module.showConfig = function(){
    var content = $("<div />");
-   var selectEnabled = $("<select />", {name: "enabled", class: "bashingSelect"});
+   var selectEnabled = $("<select />", {name: "enabled", class: "bashingSelect ui-state-default ui-corner-all ui-widget", style: "padding-top: 0px; padding-bottom: 0px;"});
    var vals = ["on","off"];
    for(var i = 0; i < vals.length; i++){
       var opt = $("<option />", {value : vals[i], text : vals[i]});
@@ -342,7 +342,7 @@ module.showConfig = function(){
    $("<span />").text("The basher is currently ").append(selectEnabled).appendTo(content);
    $("<br />").appendTo(content);
    
-   var selectFlee = $("<select />", {name: "autoflee", class: "bashingSelect"});
+   var selectFlee = $("<select />", {name: "autoflee", class: "bashingSelect ui-state-default ui-corner-all ui-widget", style: "padding-top: 0px; padding-bottom: 0px;"});
    for(var i = 0; i < vals.length; i++){
       var opt = $("<option />", {value : vals[i], text : vals[i]});
       if((vals[i] == "on") == config.autoflee){
@@ -353,12 +353,12 @@ module.showConfig = function(){
    $("<span />").text("Autofleeing is currently ").append(selectFlee).appendTo(content);
    $("<br />").appendTo(content);
    
-   $("<span />").text("Issueing a warning at ").append($("<input />", {value: config.warning, name: "warning", class: "bashingInput"})).appendTo(content);
+   $("<span />").text("Issueing a warning at ").append($("<input />", {value: config.warning, name: "warning", class: "bashingInput ui-state-default ui-corner-all ui-widget"})).appendTo(content);
    $("<br />").appendTo(content);
-   $("<span />").text("Fleeing at ").append($("<input />", {value: config.fleeing, name: "fleeing", class: "bashingInput"})).appendTo(content);
+   $("<span />").text("Fleeing at ").append($("<input />", {value: config.fleeing, name: "fleeing", class: "bashingInput ui-state-default ui-corner-all ui-widget"})).appendTo(content);
    $("<br />").appendTo(content);
 
-   var selectRaze = $("<select />", {name: "autoraze", class: "bashingSelect"});
+   var selectRaze = $("<select />", {name: "autoraze", class: "bashingSelect ui-state-default ui-corner-all ui-widget", style: "padding-top: 0px; padding-bottom: 0px;"});
    for(var i = 0; i < vals.length; i++){
       var opt = $("<option />", {value : vals[i], text : vals[i]});
       if((vals[i] == "on") == config.autoraze){
@@ -368,9 +368,9 @@ module.showConfig = function(){
    }
    $("<span />").text("Autoraze is currently ").append(selectRaze).appendTo(content);
    $("<br />").appendTo(content);
-   $("<span />").text("Using this command for razing: ").append($("<input />", {value: config.razecommand, name: "razecommand", class: "bashingInput"})).appendTo(content);
+   $("<span />").text("Using this command for razing: ").append($("<input />", {value: config.razecommand, name: "razecommand", class: "bashingInput ui-state-default ui-corner-all ui-widget"})).appendTo(content);
    $("<br />").appendTo(content);
-   $("<span />").text("Using this command for attacking: ").append($("<input />", {value: config.attackcommand, name: "attackcommand", class: "bashingInput"})).appendTo(content);
+   $("<span />").text("Using this command for attacking: ").append($("<input />", {value: config.attackcommand, name: "attackcommand", class: "bashingInput ui-state-default ui-corner-all ui-widget"})).appendTo(content);
    $("<br />").appendTo(content);
    $("<br />").appendTo(content);
    $("<button />", {text: "save", class: "ui-state-default ui-corner-all", id: "keneanung-bashing-save"}).appendTo(content);
