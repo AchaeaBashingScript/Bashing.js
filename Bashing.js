@@ -373,7 +373,9 @@ module.showConfig = function(){
    $("<span />").text("Using this command for attacking: ").append($("<input />", {value: config.attackcommand, name: "attackcommand", class: "bashingInput"})).appendTo(content);
    $("<br />").appendTo(content);
    $("<br />").appendTo(content);
-   $("<button />", {text: "save"}).on("click", function(){
+   $("<button />", {text: "save", class: "ui-state-default ui-corner-all", id: "keneanung-bashing-save"}).appendTo(content);
+
+   $(document).on("click", "#keneanung-bashing-save", function(){
       var conf = {};
       $(".bashingInput").each(function(_, elem){
          conf[elem.name] = elem.value;
@@ -381,9 +383,13 @@ module.showConfig = function(){
       $(".bashingSelect").each(function(_, elem){
          conf[elem.name] = elem[elem.selectedIndex].value == "on";
       });
-      config = conf
+      for(var key in conf){
+         if(conf.hasOwnProperty(key)) continue;
+         config[key] = conf[key];
+      }
       save();
-   }).appendTo(content);
+      $(".ui-dialog-titlebar-close").trigger("click");
+   });
 
    client.cm_dialog("#", {title: "Bashing configuration", content: content[0].outerHTML});
 };
