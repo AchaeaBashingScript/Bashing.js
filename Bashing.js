@@ -276,7 +276,6 @@ var keneanung = (function (keneanung) {
         };
 
         module.setHealth = function (health) {
-            if (attacking == -1) return;
             var difference = lastHealth - health;
             if (difference > 0) {
                 damage += health;
