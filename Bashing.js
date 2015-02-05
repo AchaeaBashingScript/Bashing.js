@@ -1,4 +1,4 @@
-keneanung = (function (keneanung) {
+var keneanung = (function (keneanung) {
     keneanung.bashing = (function () {
 
         var config = {
