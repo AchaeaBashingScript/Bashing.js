@@ -223,12 +223,8 @@ var keneanung = (function (keneanung) {
 
         var setTarget = function () {
             if (targetList.length == 0) {
-                if (gmcpTarget == "") {
-                    stopAttack();
-                }
-                if (attacking == -1) {
-                    attacking++;
-                }
+                clearTarget();
+                stopAttack();
             } else {
                 if (attacking == -1 || targetList[attacking].id != gmcpTarget) {
                     attacking++;
