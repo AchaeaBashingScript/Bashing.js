@@ -461,20 +461,22 @@ var keneanung = (function (keneanung) {
 
             var prioList = $('<fieldset class="ui-widget ui-state-default ui-corner-all">');
             prioList.append($("<legend>Priority list</legend>"));
-            prioList.append($('<ul id="keneanung-bashing-sort" class="ui-widget ui-state-default ui-corner-all" style="list-style-type: none; padding:0; margin:0;"></ul>'));
-            prioList.sortable({
-                stop: updatePrios,
-                connectWith: "#keneanung-bashing-trash"
-            }).disableSelection();
+            prioList.append($('<ul id="keneanung-bashing-sort" class="ui-widget ui-state-default ui-corner-all" style="list-style-type: none; padding:0; margin:0;"></ul>')
+                .sortable({
+                    stop: updatePrios,
+                    connectWith: "#keneanung-bashing-trash"
+                }).disableSelection()
+            );
             body.append(prioList);
 
             var trash = $('<fieldset class="ui-widget ui-state-default ui-corner-all">');
             trash.append($("<legend>Trash</legend>"));
-            trash.append($('<ul id="keneanung-bashing-trash" class="ui-widget ui-state-default ui-corner-all" style="list-style-type: none; padding:0; margin:0;"></ul>'));
-            trash.sortable({
-                stop: updatePrios,
-                connectWith: "#keneanung-bashing-sort"
-            }).disableSelection();
+            trash.append($('<ul id="keneanung-bashing-trash" class="ui-widget ui-state-default ui-corner-all" style="list-style-type: none; padding:0; margin:0;"></ul>')
+                .sortable({
+                    stop: updatePrios,
+                    connectWith: "#keneanung-bashing-sort"
+                }).disableSelection()
+            );
             body.append(trash);
 
             var saveButton = $("<button ></button>", {
