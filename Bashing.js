@@ -47,7 +47,7 @@ var keneanung = (function (keneanung) {
         };
 
         var linkify = function (text, codeToRun, alt) {
-            var a = $('<a />');
+            var a = $('<a ></a>');
             a.attr('href', "javascript:void(0);");
             a.text(text);
             a.attr('onclick', codeToRun + ";return false;");
@@ -329,79 +329,79 @@ var keneanung = (function (keneanung) {
         };
 
         module.showConfig = function () {
-            var content = $("<div />");
-            var selectEnabled = $("<select />", {
+            var content = $("<div ></div>");
+            var selectEnabled = $("<select ></select>", {
                 name: "enabled",
                 class: "bashingSelect ui-state-default ui-corner-all ui-widget",
                 style: "padding-top: 0px; padding-bottom: 0px;"
             });
             var vals = ["on", "off"];
             for (var i = 0; i < vals.length; i++) {
-                var opt = $("<option />", {value: vals[i], text: vals[i]});
+                var opt = $("<option ></option>", {value: vals[i], text: vals[i]});
                 if ((vals[i] == "on") == config.enabled) {
                     opt.attr("selected", "selected");
                 }
                 selectEnabled.append(opt);
             }
-            $("<span />").text("The basher is currently ").append(selectEnabled).appendTo(content);
+            $("<span ></span>").text("The basher is currently ").append(selectEnabled).appendTo(content);
             $("<br />").appendTo(content);
 
-            var selectFlee = $("<select />", {
+            var selectFlee = $("<select ></select>", {
                 name: "autoflee",
                 class: "bashingSelect ui-state-default ui-corner-all ui-widget",
                 style: "padding-top: 0px; padding-bottom: 0px;"
             });
             for (var i = 0; i < vals.length; i++) {
-                var opt = $("<option />", {value: vals[i], text: vals[i]});
+                var opt = $("<option ></option>", {value: vals[i], text: vals[i]});
                 if ((vals[i] == "on") == config.autoflee) {
                     opt.attr("selected", "selected");
                 }
                 selectFlee.append(opt);
             }
-            $("<span />").text("Autofleeing is currently ").append(selectFlee).appendTo(content);
+            $("<span ></span>").text("Autofleeing is currently ").append(selectFlee).appendTo(content);
             $("<br />").appendTo(content);
 
-            $("<span />").text("Issueing a warning at ").append($("<input />", {
+            $("<span ></span>").text("Issueing a warning at ").append($("<input />", {
                 value: config.warning,
                 name: "warning",
                 class: "bashingInput ui-state-default ui-corner-all ui-widget"
             })).appendTo(content);
             $("<br />").appendTo(content);
-            $("<span />").text("Fleeing at ").append($("<input />", {
+            $("<span ></span>").text("Fleeing at ").append($("<input />", {
                 value: config.fleeing,
                 name: "fleeing",
                 class: "bashingInput ui-state-default ui-corner-all ui-widget"
             })).appendTo(content);
             $("<br />").appendTo(content);
 
-            var selectRaze = $("<select />", {
+            var selectRaze = $("<select ></select>", {
                 name: "autoraze",
                 class: "bashingSelect ui-state-default ui-corner-all ui-widget",
                 style: "padding-top: 0px; padding-bottom: 0px;"
             });
             for (var i = 0; i < vals.length; i++) {
-                var opt = $("<option />", {value: vals[i], text: vals[i]});
+                var opt = $("<option ></option>", {value: vals[i], text: vals[i]});
                 if ((vals[i] == "on") == config.autoraze) {
                     opt.attr("selected", "selected");
                 }
                 selectRaze.append(opt);
             }
-            $("<span />").text("Autoraze is currently ").append(selectRaze).appendTo(content);
+            $("<span ></span>").text("Autoraze is currently ").append(selectRaze).appendTo(content);
             $("<br />").appendTo(content);
-            $("<span />").text("Using this command for razing: ").append($("<input />", {
+            $("<span ></span>").text("Using this command for razing: ").append($("<input />", {
                 value: config.razecommand,
                 name: "razecommand",
                 class: "bashingInput ui-state-default ui-corner-all ui-widget"
             })).appendTo(content);
             $("<br />").appendTo(content);
-            $("<span />").text("Using this command for attacking: ").append($("<input />", {
+            $("<span ></span>").text("Using this command for attacking: ").append($("<input />", {
                 value: config.attackcommand,
                 name: "attackcommand",
                 class: "bashingInput ui-state-default ui-corner-all ui-widget"
             })).appendTo(content);
             $("<br />").appendTo(content);
             $("<br />").appendTo(content);
-            $("<button />", {
+            $("<button ></button>", {
                 text: "save",
                 class: "ui-state-default ui-corner-all",
                 id: "keneanung-bashing-save"
@@ -421,6 +421,79 @@ var keneanung = (function (keneanung) {
                     if (!conf.hasOwnProperty(key)) continue;
                     config[key] = conf[key];
                 }
+                save();
+                $(".ui-dialog-titlebar-close").trigger("click");
+            });
+        };
+
+        module.showPrios = function(){
+            var body = $("<div ></div>");
+            var selectHtml = $('<select id="keneanung-bashing-prio-areas" class="ui-widget ui-state-default ui-corner-all" />');
+            body.append(selectHtml[0].outerHTML);
+
+            var prioListHtml = $('<fieldset class="ui-widget ui-state-default ui-corner-all">');
+            prioListHtml.append($("<legend>Priority list</legend>"));
+            prioListHtml.append($('<ul id="keneanung-bashing-sort" class="ui-widget ui-state-default ui-corner-all" style="list-style-type: none; padding:0; margin:0;"></ul>'));
+            body.append(prioListHtml[0].outerHTML);
+
+            var trashHtml = $('<fieldset class="ui-widget ui-state-default ui-corner-all">');
+            trashHtml.append($("<legend>Trash</legend>"));
+            trashHtml.append($('<ul id="keneanung-bashing-trash" class="ui-widget ui-state-default ui-corner-all" style="list-style-type: none; padding:0; margin:0;"></ul>'));
+            body.append(trashHtml[0].outerHTML);
+
+            $("<button ></button>", {
+                text: "save",
+                class: "ui-state-default ui-corner-all",
+                id: "keneanung-bashing-save"
+            }).appendTo(body);
+
+            client.cm_dialog("#", {title: "Bashing priorities", content: body[0].outerHTML});
+
+            var select = $("#keneanung-bashing-prio-areas");
+
+            var fillList = function () {
+                var selectDOM = select[0];
+                var area = selectDOM[selectDOM.selectedIndex].text;
+                var targets = config.prios[area];
+                var list = $("#keneanung-bashing-sort");
+                list.empty();
+                for (var i = 0; i < targets.length; i++) {
+                    list.append("<li> " + targets[i] + "</li>");
+                }
+            };
+
+            var updatePrios = function () {
+                var newPrios = [];
+                $("#keneanung-bashing-sort").children().each(function (index) {
+                    newPrios[index] = $(this).text();
+                });
+                var selectDOM = select[0];
+                var area = selectDOM[selectDOM.selectedIndex].text;
+                config.prios[area] = newPrios;
+            };
+
+            for (var area in config.prios) {
+                if (config.prios.hasOwnProperty(area)) {
+                    select.append("<option>" + area + "</option>");
+                }
+            }
+
+            select.on("change", fillList);
+
+            fillList();
+
+            $("#keneanung-bashing-sort").sortable({
+                stop: updatePrios,
+                connectWith: "#keneanung-bashing-trash"
+            });
+            $("#keneanung-bashing-sort").disableSelection();
+
+            $("#keneanung-bashing-trash").sortable({
+                stop: updatePrios,
+                connectWith: "#keneanung-bashing-sort"
+            }).disableSelection();
+
+            $("#keneanung-bashing-save").on("click", function () {
                 save();
                 $(".ui-dialog-titlebar-close").trigger("click");
             });
