@@ -428,6 +428,8 @@ var keneanung = (function (keneanung) {
 
         module.showPrios = function(){
 
+            var body = $("<div ></div>");
+            var select = $('<select id="keneanung-bashing-prio-areas" class="ui-widget ui-state-default ui-corner-all" ></select>');
             var fillList = function () {
                 var selectDOM = select[0];
                 var area = selectDOM[selectDOM.selectedIndex].text;
@@ -438,9 +440,6 @@ var keneanung = (function (keneanung) {
                     list.append("<li> " + targets[i] + "</li>");
                 }
             };
-
-            var body = $("<div ></div>");
-            var select = $('<select id="keneanung-bashing-prio-areas" class="ui-widget ui-state-default ui-corner-all" ></select>');
             select.on("change", fillList);
             body.append(select);
 
@@ -485,14 +484,17 @@ var keneanung = (function (keneanung) {
             });
             saveButton.on("click", function () {
                 save();
-                body.empty();
-                $(".ui-dialog-titlebar-close").trigger("click");
+                body.dialog("close");
             });
             body.append(saveButton);
 
             fillList();
 
-            body.dialog();
+            body.dialog({
+                close: function(){
+                    body.empty();
+                }
+            });
         };
 
         return module;
