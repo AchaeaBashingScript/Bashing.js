@@ -237,11 +237,30 @@ var keneanung = (function (keneanung) {
             }
         };
 
-        var warnFlee = function() {
+        var clearTarget = function() {
+            client.send_GMCP('IRE.Target.Set "0"')
+            attacking = 0
+        };
+
+        var startAttack = function () {
+            if (attacking > 0) {
+                var trigger = client.find_reflex_by_name("trigger", "keneanung.bashing.queueTrigger");
+                client.reflex_enable(trigger);
+                client.send_direct("queue add eqbal keneanungki", false);
+            }
+        };
+
+        var stopAttack = function () {
+            var trigger = client.find_reflex_by_name("trigger", "keneanung.bashing.queueTrigger");
+            client.reflex_disable(trigger);
+            client.send_direct("cq all")
+        };
+
+        var warnFlee = function () {
             kecho("Better run or get ready to die!");
         };
 
-        var notifyFlee = function() {
+        var notifyFlee = function () {
             kecho("Running as you have not enough health left.");
         };
 
@@ -256,33 +275,31 @@ var keneanung = (function (keneanung) {
         };
 
         module.setHealth = function (health) {
-            if(attacking == 0) return;
+            if (attacking == 0) return;
             var difference = lastHealth - health;
-            if(difference > 0){
+            if (difference > 0) {
                 damage += health;
-            }else{
+            } else {
                 healing += Math.abs(difference);
             }
 
             lastHealth = health;
         };
 
-        module.startAttack = function() {
-            if(attacking > 0) {
-                var trigger = client.find_reflex_by_name("trigger", "keneanung.bashing.queueTrigger");
-                client.reflex_enable(trigger);
-                client.send_direct("queue add eqbal keneanungki", false);
+        module.attackButton = function (){
+            if (attacking == 0) {
+                setTarget();
+                startAttack();
+                kecho("Nothing will stand in our way.\n");
+            } else{
+                clearTarget();
+                stopAttack();
+                kecho("Lets save them for later.\n");
             }
-        };
-
-        module.stopAttack = function() {
-            var trigger = client.find_reflex_by_name("trigger", "keneanung.bashing.queueTrigger");
-            client.reflex_disable(trigger);
-            client.send_direct("cq all")
-        };
+         };
 
         module.flee = function() {
-            module.stopAttack();
+            stopAttack();
             client.send_direct("queue prepend eqbal " + fleeDirection)
         };
 
@@ -584,4 +601,4 @@ var keneanung = (function (keneanung) {
 
     }());
     return keneanung;
-}({}));
+}(keneanung || {}));
