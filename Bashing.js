@@ -238,20 +238,20 @@ var keneanung = (function (keneanung) {
         };
 
         var clearTarget = function() {
-            client.send_GMCP('IRE.Target.Set "0"')
-            attacking = 0
+            client.send_GMCP('IRE.Target.Set "0"');
+            attacking = -1;
         };
 
         var startAttack = function () {
-            if (attacking > 0) {
-                var trigger = client.find_reflex_by_name("trigger", "keneanung.bashing.queueTrigger");
+            if (attacking >= 0) {
+                var trigger = client.reflex_find_by_name("trigger", "keneanung.bashing.queueTrigger");
                 client.reflex_enable(trigger);
                 client.send_direct("queue add eqbal keneanungki", false);
             }
         };
 
         var stopAttack = function () {
-            var trigger = client.find_reflex_by_name("trigger", "keneanung.bashing.queueTrigger");
+            var trigger = client.reflex_find_by_name("trigger", "keneanung.bashing.queueTrigger");
             client.reflex_disable(trigger);
             client.send_direct("cq all")
         };
@@ -275,7 +275,7 @@ var keneanung = (function (keneanung) {
         };
 
         module.setHealth = function (health) {
-            if (attacking == 0) return;
+            if (attacking == -1) return;
             var difference = lastHealth - health;
             if (difference > 0) {
                 damage += health;
@@ -287,7 +287,7 @@ var keneanung = (function (keneanung) {
         };
 
         module.attackButton = function (){
-            if (attacking == 0) {
+            if (attacking == -1) {
                 setTarget();
                 startAttack();
                 kecho("Nothing will stand in our way.\n");
