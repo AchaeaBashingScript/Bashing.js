@@ -584,4 +584,4 @@ var keneanung = (function (keneanung) {
 
     }());
     return keneanung;
-}(keneanung || {}));
+}({}));
