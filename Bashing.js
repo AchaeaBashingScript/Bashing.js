@@ -253,7 +253,8 @@ var keneanung = (function (keneanung) {
         var stopAttack = function () {
             var trigger = client.reflex_find_by_name("trigger", "keneanung.bashing.queueTrigger");
             client.reflex_disable(trigger);
-            client.send_direct("cq all")
+            client.send_direct("cq all");
+            attacking = -1;
         };
 
         var warnFlee = function () {
@@ -321,7 +322,7 @@ var keneanung = (function (keneanung) {
 
             if(config.autoflee && estimatedDmg > lastHealth - fleeat){
                 notifyFlee();
-                flee();
+                module.flee();
                 return;
             }else if(estimatedDmg > lastHealth - warnat){
                 warnFlee();
