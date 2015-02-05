@@ -76,7 +76,7 @@ var keneanung = (function (keneanung) {
                 kecho("##red##Couldn't save settings!");
             } else {
                 //make sure the changes get uploaded to IRE...
-                if (client.settings_window) {
+                if (client.settings_window && client.settings_window.set_system_vals) {
                     client.settings_window.set_system_vals();
                     client.settings_window.system_changed = false;
                     client.system_changed = false;
@@ -427,29 +427,6 @@ var keneanung = (function (keneanung) {
         };
 
         module.showPrios = function(){
-            var body = $("<div ></div>");
-            var selectHtml = $('<select id="keneanung-bashing-prio-areas" class="ui-widget ui-state-default ui-corner-all" />');
-            body.append(selectHtml[0].outerHTML);
-
-            var prioListHtml = $('<fieldset class="ui-widget ui-state-default ui-corner-all">');
-            prioListHtml.append($("<legend>Priority list</legend>"));
-            prioListHtml.append($('<ul id="keneanung-bashing-sort" class="ui-widget ui-state-default ui-corner-all" style="list-style-type: none; padding:0; margin:0;"></ul>'));
-            body.append(prioListHtml[0].outerHTML);
-
-            var trashHtml = $('<fieldset class="ui-widget ui-state-default ui-corner-all">');
-            trashHtml.append($("<legend>Trash</legend>"));
-            trashHtml.append($('<ul id="keneanung-bashing-trash" class="ui-widget ui-state-default ui-corner-all" style="list-style-type: none; padding:0; margin:0;"></ul>'));
-            body.append(trashHtml[0].outerHTML);
-
-            $("<button ></button>", {
-                text: "save",
-                class: "ui-state-default ui-corner-all",
-                id: "keneanung-bashing-save"
-            }).appendTo(body);
-
-            client.cm_dialog("#", {title: "Bashing priorities", content: body[0].outerHTML});
-
-            var select = $("#keneanung-bashing-prio-areas");
 
             var fillList = function () {
                 var selectDOM = select[0];
@@ -461,6 +438,11 @@ var keneanung = (function (keneanung) {
                     list.append("<li> " + targets[i] + "</li>");
                 }
             };
+
+            var body = $("<div ></div>");
+            var select = $('<select id="keneanung-bashing-prio-areas" class="ui-widget ui-state-default ui-corner-all" ></select>');
+            select.on("change", fillList);
+            body.append(select);
 
             var updatePrios = function () {
                 var newPrios = [];
@@ -478,25 +460,39 @@ var keneanung = (function (keneanung) {
                 }
             }
 
-            select.on("change", fillList);
-
-            fillList();
-
-            $("#keneanung-bashing-sort").sortable({
+            var prioList = $('<fieldset class="ui-widget ui-state-default ui-corner-all">');
+            prioList.append($("<legend>Priority list</legend>"));
+            prioList.append($('<ul id="keneanung-bashing-sort" class="ui-widget ui-state-default ui-corner-all" style="list-style-type: none; padding:0; margin:0;"></ul>'));
+            prioList.sortable({
                 stop: updatePrios,
                 connectWith: "#keneanung-bashing-trash"
-            });
-            $("#keneanung-bashing-sort").disableSelection();
+            }).disableSelection();
+            body.append(prioList);
 
-            $("#keneanung-bashing-trash").sortable({
+            var trash = $('<fieldset class="ui-widget ui-state-default ui-corner-all">');
+            trash.append($("<legend>Trash</legend>"));
+            trash.append($('<ul id="keneanung-bashing-trash" class="ui-widget ui-state-default ui-corner-all" style="list-style-type: none; padding:0; margin:0;"></ul>'));
+            trash.sortable({
                 stop: updatePrios,
                 connectWith: "#keneanung-bashing-sort"
             }).disableSelection();
+            body.append(trash);
 
-            $("#keneanung-bashing-save").on("click", function () {
+            var saveButton = $("<button ></button>", {
+                text: "save",
+                class: "ui-state-default ui-corner-all",
+                id: "keneanung-bashing-prios-save"
+            });
+            saveButton.on("click", function () {
                 save();
+                body.empty();
                 $(".ui-dialog-titlebar-close").trigger("click");
             });
+            body.append(saveButton);
+
+            fillList();
+
+            body.dialog();
         };
 
         return module;
