@@ -405,11 +405,7 @@ var keneanung = (function (keneanung) {
                 text: "save",
                 class: "ui-state-default ui-corner-all",
                 id: "keneanung-bashing-save"
-            }).appendTo(content);
-
-            client.cm_dialog("#", {title: "Bashing configuration", content: content[0].outerHTML});
-
-            $("#keneanung-bashing-save").on("click", function () {
+            }).on("click", function () {
                 var conf = {};
                 $(".bashingInput").each(function (_, elem) {
                     conf[elem.name] = elem.value;
@@ -422,7 +418,14 @@ var keneanung = (function (keneanung) {
                     config[key] = conf[key];
                 }
                 save();
-                $(".ui-dialog-titlebar-close").trigger("click");
+                content.dialog("close");
+            }).appendTo(content);
+
+            content.dialog({
+                close: function(){
+                    content.empty();
+                },
+                title: "Bashing Settings"
             });
         };
 
@@ -493,7 +496,8 @@ var keneanung = (function (keneanung) {
             body.dialog({
                 close: function(){
                     body.empty();
-                }
+                },
+                title: "Bashing Priorities"
             });
 
             fillList();
