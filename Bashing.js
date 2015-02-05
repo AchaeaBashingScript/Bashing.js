@@ -1,4 +1,4 @@
-var keneanung = (function (keneanung) {
+keneanung = (function (keneanung) {
     keneanung.bashing = (function () {
 
         var config = {
@@ -15,11 +15,19 @@ var keneanung = (function (keneanung) {
         var gmcpArea = "";
         var gmcpTarget = "";
 
+        var damage = 0;
+        var healing = 0;
+        var lastHealth = 0;
+
         var targetList = [];
 
         var roomContent = [];
 
         var attacking = -1;
+
+        var attacks = 0;
+
+        var fleeDirection = "n";
 
         var colorify = function (str) {
             var pattern = /##(\w+)##/;
@@ -86,6 +94,14 @@ var keneanung = (function (keneanung) {
                     "(cogwheels lower right side) and click on 'Save " +
                     "Client Settings' to keep your config.");
                 }
+            }
+        };
+
+        var load = function () {
+            var loadedConfig = client.get_variable("keneanung.bashing.config");
+            for (var key in loadedConfig) {
+                if (loadedConfig.hasOwnProperty(key))
+                    config[key] = loadedConfig[key];
             }
         };
 
@@ -208,7 +224,7 @@ var keneanung = (function (keneanung) {
         var setTarget = function () {
             if (targetList.length == 0) {
                 if (gmcpTarget == "") {
-                    //TODO: stop attack
+                    stopAttack();
                 }
                 if (attacking == -1) {
                     attacking++;
@@ -221,6 +237,14 @@ var keneanung = (function (keneanung) {
             }
         };
 
+        var warnFlee = function() {
+            kecho("Better run or get ready to die!");
+        };
+
+        var notifyFlee = function() {
+            kecho("Running as you have not enough health left.");
+        };
+
         var module = {};
 
         module.setArea = function (areaName) {
@@ -231,12 +255,61 @@ var keneanung = (function (keneanung) {
             gmcpTarget = target;
         };
 
-        module.load = function () {
-            var loadedConfig = client.get_variable("keneanung.bashing.config");
-            for (var key in loadedConfig) {
-                if (loadedConfig.hasOwnProperty(key))
-                    config[key] = loadedConfig[key];
+        module.setHealth = function (health) {
+            if(attacking == 0) return;
+            var difference = lastHealth - health;
+            if(difference > 0){
+                damage += health;
+            }else{
+                healing += Math.abs(difference);
             }
+
+            lastHealth = health;
+        };
+
+        module.startAttack = function() {
+            if(attacking > 0) {
+                var trigger = client.find_reflex_by_name("trigger", "keneanung.bashing.queueTrigger");
+                client.reflex_enable(trigger);
+                client.send_direct("queue add eqbal keneanungki", false);
+            }
+        };
+
+        module.stopAttack = function() {
+            var trigger = client.find_reflex_by_name("trigger", "keneanung.bashing.queueTrigger");
+            client.reflex_disable(trigger);
+            client.send_direct("cq all")
+        };
+
+        module.flee = function() {
+            module.stopAttack();
+            client.send_direct("queue prepend eqbal " + fleeDirection)
+        };
+
+        module.handleShield = function() {
+            if(config.autoraze){
+                client.send_direct("queue prepend eqbal keneanungra", false);
+            }
+        };
+
+        module.attack = function(){
+            attacks++;
+            var avgDmg = damage / attacks;
+            var avgHeal = healing / attacks;
+
+            var estimatedDmg = avgDmg * 2 - avgHeal;
+
+            var fleeat = config.fleeing; //TODO should be keneanung.bashing.calcFleeValue(keneanung.bashing.configuration.fleeing)
+            var warnat = config.warning; //TODO should be keneanung.bashing.calcFleeValue(keneanung.bashing.configuration.warning)
+
+            if(config.autoflee && estimatedDmg > lastHealth - fleeat){
+                notifyFlee();
+                flee();
+                return;
+            }else if(estimatedDmg > lastHealth - warnat){
+                warnFlee();
+            }
+            client.send_direct("queue add eqbal keneanungki", false);
         };
 
         module.addPossibleTarget = function (targetName) {
@@ -503,10 +576,12 @@ var keneanung = (function (keneanung) {
             fillList();
         };
 
+        load();
+        client.send_direct("setalias keneanungki " + config.attackcommand);
+        client.send_direct("setalias keneanungra " + config.razecommand);
+
         return module;
 
     }());
     return keneanung;
 }(keneanung || {}));
-
-keneanung.bashing.load();
