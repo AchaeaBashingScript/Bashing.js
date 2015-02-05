@@ -429,7 +429,7 @@ var keneanung = (function (keneanung) {
         module.showPrios = function(){
 
             var body = $("<div ></div>");
-            var select = $('<select id="keneanung-bashing-prio-areas" class="ui-widget ui-state-default ui-corner-all" ></select>');
+            var select = $('<select id="keneanung-bashing-prio-areas" class="ui-widget ui-state-default ui-corner-all" style= "padding-top: 0; padding-bottom: 0;"></select>');
             var fillList = function () {
                 var selectDOM = select[0];
                 var area = selectDOM[selectDOM.selectedIndex].text;
@@ -446,7 +446,7 @@ var keneanung = (function (keneanung) {
             var updatePrios = function () {
                 var newPrios = [];
                 $("#keneanung-bashing-sort").children().each(function (index) {
-                    newPrios[index] = $(this).text();
+                    newPrios[index] = $.trim($(this).text());
                 });
                 var selectDOM = select[0];
                 var area = selectDOM[selectDOM.selectedIndex].text;
@@ -490,13 +490,13 @@ var keneanung = (function (keneanung) {
             });
             body.append(saveButton);
 
-            fillList();
-
             body.dialog({
                 close: function(){
                     body.empty();
                 }
             });
+
+            fillList();
         };
 
         return module;
