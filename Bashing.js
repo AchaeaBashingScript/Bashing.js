@@ -493,6 +493,8 @@ var keneanung = (function (keneanung) {
                 id: "keneanung-bashing-save"
             }).on("click", function () {
                 var conf = {};
+                var oldAttackCommand = config.attackcommand;
+                var oldRazeCommand   = config.razecommand;
                 $(".bashingInput").each(function (_, elem) {
                     conf[elem.name] = elem.value;
                 });
@@ -503,6 +505,14 @@ var keneanung = (function (keneanung) {
                     if (!conf.hasOwnProperty(key)) continue;
                     config[key] = conf[key];
                 }
+                
+                if(config.attackcommand != oldAttackCommand){
+                    client.send_direct("setalias keneanungki " + config.attackcommand)
+                }
+                if(config.razecommand != oldRazeCommand){
+                    client.send_direct("setalias keneanungra " + config.razecommand)
+                }
+                
                 save();
                 content.dialog("close");
             }).appendTo(content);
