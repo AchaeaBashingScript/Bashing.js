@@ -66,7 +66,7 @@ var keneanung = (function (keneanung) {
         var kecho = function (text) {
             var toEcho = "<p>##forestgreen##keneanung##reset##: " + text + "</p>";
             var colouredEcho = colorify(toEcho);
-            client.ow_Write("#output_main", colouredEcho);
+            ow_Write("#output_main", colouredEcho);
             console.log(text);
         };
 
@@ -80,15 +80,15 @@ var keneanung = (function (keneanung) {
 
         var save = function () {
             //var configString = JSON.stringify(config);
-            if (!client.set_variable("keneanung.bashing.config", config)) {
+            if (!set_variable("keneanung.bashing.config", config)) {
                 kecho("##red##Couldn't save settings!");
             } else {
                 //make sure the changes get uploaded to IRE...
-                if (client.settings_window && client.settings_window.set_system_vals) {
-                    client.settings_window.set_system_vals();
-                    client.settings_window.system_changed = false;
+                if (settings_window && settings_window.set_system_vals) {
+                    settings_window.set_system_vals();
+                    settings_window.system_changed = false;
                     client.system_changed = false;
-                    client.gmcp_save_system();
+                    gmcp_save_system();
                 } else {
                     kecho("##yellow##No settings window open. Please open it " +
                     "(cogwheels lower right side) and click on 'Save " +
@@ -98,7 +98,7 @@ var keneanung = (function (keneanung) {
         };
 
         var load = function () {
-            var loadedConfig = client.get_variable("keneanung.bashing.config");
+            var loadedConfig = get_variable("keneanung.bashing.config");
             for (var key in loadedConfig) {
                 if (loadedConfig.hasOwnProperty(key))
                     config[key] = loadedConfig[key];
@@ -203,7 +203,7 @@ var keneanung = (function (keneanung) {
         var displayTargetList = function () {
             kecho("Current target list:");
             for (var i = 0; i < targetList.length; i++) {
-                client.ow_Write("#output_main",
+                ow_Write("#output_main",
                     "<span style='color: orange; white-space: pre-wrap'>     "
                     + targetList[i].name + "</span>");
             }
@@ -229,27 +229,27 @@ var keneanung = (function (keneanung) {
                 if (attacking == -1 || targetList[attacking].id != gmcpTarget) {
                     attacking++;
                 }
-                client.send_GMCP("IRE.Target.Set", targetList[attacking].id + "");
+                send_GMCP("IRE.Target.Set", targetList[attacking].id + "");
             }
         };
 
         var clearTarget = function() {
-            client.send_GMCP('IRE.Target.Set "0"');
+            send_GMCP('IRE.Target.Set "0"');
             attacking = -1;
         };
 
         var startAttack = function () {
             if (attacking >= 0) {
-                var trigger = client.reflex_find_by_name("trigger", "keneanung.bashing.queueTrigger");
-                client.reflex_enable(trigger);
-                client.send_direct("queue add eqbal keneanungki", false);
+                var trigger = reflex_find_by_name("trigger", "keneanung.bashing.queueTrigger");
+                reflex_enable(trigger);
+                send_direct("queue add eqbal keneanungki", false);
             }
         };
 
         var stopAttack = function () {
-            var trigger = client.reflex_find_by_name("trigger", "keneanung.bashing.queueTrigger");
-            client.reflex_disable(trigger);
-            client.send_direct("cq all");
+            var trigger = reflex_find_by_name("trigger", "keneanung.bashing.queueTrigger");
+            reflex_disable(trigger);
+            send_direct("cq all");
             attacking = -1;
         };
 
@@ -296,12 +296,12 @@ var keneanung = (function (keneanung) {
 
         module.flee = function() {
             stopAttack();
-            client.send_direct("queue prepend eqbal " + fleeDirection)
+            send_direct("queue prepend eqbal " + fleeDirection)
         };
 
         module.handleShield = function() {
             if(config.autoraze){
-                client.send_direct("queue prepend eqbal keneanungra", false);
+                send_direct("queue prepend eqbal keneanungra", false);
             }
         };
 
@@ -322,7 +322,7 @@ var keneanung = (function (keneanung) {
             }else if(estimatedDmg > lastHealth - warnat){
                 warnFlee();
             }
-            client.send_direct("queue add eqbal keneanungki", false);
+            send_direct("queue add eqbal keneanungki", false);
         };
 
         module.addPossibleTarget = function (targetName) {
@@ -422,8 +422,9 @@ var keneanung = (function (keneanung) {
                 style: "padding-top: 0px; padding-bottom: 0px;"
             });
             var vals = ["on", "off"];
-            for (var i = 0; i < vals.length; i++) {
-                var opt = $("<option ></option>", {value: vals[i], text: vals[i]});
+            var i, opt;
+            for (i = 0; i < vals.length; i++) {
+                opt = $("<option ></option>", {value: vals[i], text: vals[i]});
                 if ((vals[i] == "on") == config.enabled) {
                     opt.attr("selected", "selected");
                 }
@@ -437,8 +438,8 @@ var keneanung = (function (keneanung) {
                 class: "bashingSelect ui-state-default ui-corner-all ui-widget",
                 style: "padding-top: 0px; padding-bottom: 0px;"
             });
-            for (var i = 0; i < vals.length; i++) {
-                var opt = $("<option ></option>", {value: vals[i], text: vals[i]});
+            for (i = 0; i < vals.length; i++) {
+                opt = $("<option ></option>", {value: vals[i], text: vals[i]});
                 if ((vals[i] == "on") == config.autoflee) {
                     opt.attr("selected", "selected");
                 }
@@ -465,8 +466,8 @@ var keneanung = (function (keneanung) {
                 class: "bashingSelect ui-state-default ui-corner-all ui-widget",
                 style: "padding-top: 0px; padding-bottom: 0px;"
             });
-            for (var i = 0; i < vals.length; i++) {
-                var opt = $("<option ></option>", {value: vals[i], text: vals[i]});
+            for (i = 0; i < vals.length; i++) {
+                opt = $("<option ></option>", {value: vals[i], text: vals[i]});
                 if ((vals[i] == "on") == config.autoraze) {
                     opt.attr("selected", "selected");
                 }
@@ -507,10 +508,10 @@ var keneanung = (function (keneanung) {
                 }
                 
                 if(config.attackcommand != oldAttackCommand){
-                    client.send_direct("setalias keneanungki " + config.attackcommand)
+                    send_direct("setalias keneanungki " + config.attackcommand)
                 }
                 if(config.razecommand != oldRazeCommand){
-                    client.send_direct("setalias keneanungra " + config.razecommand)
+                    send_direct("setalias keneanungra " + config.razecommand)
                 }
                 
                 save();
@@ -600,8 +601,8 @@ var keneanung = (function (keneanung) {
         };
 
         load();
-        client.send_direct("setalias keneanungki " + config.attackcommand);
-        client.send_direct("setalias keneanungra " + config.razecommand);
+        send_direct("setalias keneanungki " + config.attackcommand);
+        send_direct("setalias keneanungra " + config.razecommand);
 
         return module;
 
