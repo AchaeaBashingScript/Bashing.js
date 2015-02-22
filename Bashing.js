@@ -1,4 +1,5 @@
 var keneanung = (function (keneanung) {
+    "use strict";
     keneanung.bashing = (function () {
 
         var config = {
@@ -18,6 +19,7 @@ var keneanung = (function (keneanung) {
         var damage = 0;
         var healing = 0;
         var lastHealth = 0;
+        var maxHealth = 0;
 
         var targetList = [];
 
@@ -261,17 +263,35 @@ var keneanung = (function (keneanung) {
             kecho("Running as you have not enough health left.");
         };
 
+        var calcFleeValue = function(configValue){
+            var isString = typeof(configValue) == "string";
+            if(isString && /%$/.test(configValue))
+            {
+                return /^(\d+)/.exec(configValue)[1] * maxHealth / 100;
+            }
+            else if(isString && /d$/.test(configValue))
+            {
+                return /^(.+?)d/.exec(configValue)[1] * damage / attacks;
+            }
+            else
+            {
+                return parseInt(configValue);
+            }
+        };
+
         var module = {};
 
-        module.setArea = function (areaName) {
-            gmcpArea = areaName;
+        module.roomInfoCallback = function (roomInfo) {
+            gmcpArea = roomInfo.area;
         };
 
         module.setGmcpTarget = function (target) {
             gmcpTarget = target;
         };
 
-        module.setHealth = function (health) {
+        module.vitalsCallback = function (vitals) {
+            var health = vitals.hp;
+            maxHealth = vitals.maxhp;
             var difference = lastHealth - health;
             if (difference > 0) {
                 damage += health;
@@ -312,8 +332,8 @@ var keneanung = (function (keneanung) {
 
             var estimatedDmg = avgDmg * 2 - avgHeal;
 
-            var fleeat = config.fleeing; //TODO should be keneanung.bashing.calcFleeValue(keneanung.bashing.configuration.fleeing)
-            var warnat = config.warning; //TODO should be keneanung.bashing.calcFleeValue(keneanung.bashing.configuration.warning)
+            var fleeat = calcFleeValue(config.fleeing);
+            var warnat = calcFleeValue(config.warning);
 
             if(config.autoflee && estimatedDmg > lastHealth - fleeat){
                 notifyFlee();
