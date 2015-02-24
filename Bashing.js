@@ -14,7 +14,8 @@ var keneanung = (function (keneanung) {
         };
 
         var gmcpArea = "";
-        var gmcpTarget = "";
+        var gmcpTargetId = "";
+        var gmcpStatusTarget = "None";
 
         var damage = 0;
         var healing = 0;
@@ -226,10 +227,25 @@ var keneanung = (function (keneanung) {
 
         var setTarget = function () {
             if (targetList.length == 0) {
-                clearTarget();
-                stopAttack();
+                var targetSet = false;
+                if(gmcpStatusTarget != "None"){
+                    for(var i = 0; i < roomContent.length; i++){
+                        var cont = roomContent[i];
+                        if(cont.attrib.indexOf("m") > -1 && cont.name.toLowerCase().indexOf(gmcpStatusTarget) > -1){
+                            targetList[targetList.length] = {
+                                id: cont.id,
+                                name: cont.name
+                            };
+                            targetSet = true;
+                        }
+                    }
+                }
+                if(!targetSet){
+                    clearTarget();
+                    stopAttack();
+                }
             } else {
-                if (attacking == -1 || targetList[attacking].id != gmcpTarget) {
+                if (attacking == -1 || targetList[attacking].id != gmcpTargetId) {
                     attacking++;
                 }
                 send_GMCP("IRE.Target.Set", targetList[attacking].id + "");
@@ -322,7 +338,7 @@ var keneanung = (function (keneanung) {
         };
 
         module.setGmcpTarget = function (target) {
-            gmcpTarget = target;
+            gmcpTargetId = target;
         };
 
         module.vitalsCallback = function (vitals) {
@@ -336,6 +352,10 @@ var keneanung = (function (keneanung) {
             }
 
             lastHealth = health;
+        };
+
+        module.statusCallback = function (status){
+            gmcpStatusTarget = status.target;
         };
 
         module.attackButton = function (){
