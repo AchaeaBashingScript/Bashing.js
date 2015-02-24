@@ -268,15 +268,15 @@ var keneanung = (function (keneanung) {
             var isString = typeof(configValue) == "string";
             if(isString && /%$/.test(configValue))
             {
-                return /^(\d+)/.exec(configValue)[1] * maxHealth / 100;
+                return Number(/^(\d+)/.exec(configValue)[1]) * maxHealth / 100;
             }
             else if(isString && /d$/.test(configValue))
             {
-                return /^(.+?)d/.exec(configValue)[1] * damage / attacks;
+                return Number(/^(.+?)d/.exec(configValue)[1]) * damage / attacks;
             }
             else
             {
-                return parseInt(configValue);
+                return Number(configValue);
             }
         };
 
@@ -315,7 +315,7 @@ var keneanung = (function (keneanung) {
             }
 
             if(!found && typeof roomInfo.ohmap == "undefined"){
-                kecho("###red###WARNING:###reset### No exit to flee found, reusing ###red###" + fleeDirection + "###reset###.")
+                kecho("##red##WARNING:##reset## No exit to flee found, reusing ##red##" + fleeDirection + "##reset##.")
             }
 
             lastRoom = roomInfo.num;
@@ -326,8 +326,8 @@ var keneanung = (function (keneanung) {
         };
 
         module.vitalsCallback = function (vitals) {
-            var health = vitals.hp;
-            maxHealth = vitals.maxhp;
+            var health = Number(vitals.hp);
+            maxHealth = Number(vitals.maxhp);
             var difference = lastHealth - health;
             if (difference > 0) {
                 damage += health;
