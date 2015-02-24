@@ -30,6 +30,7 @@ var keneanung = (function (keneanung) {
         var attacks = 0;
 
         var fleeDirection = "n";
+        var lastRoom = "";
 
         var colorify = function (str) {
             var pattern = /##(\w+)##/;
@@ -283,6 +284,41 @@ var keneanung = (function (keneanung) {
 
         module.roomInfoCallback = function (roomInfo) {
             gmcpArea = roomInfo.area;
+
+            if(lastRoom == ""){
+                lastRoom = roomInfo.num;
+                fleeDirection = "n";
+            }
+            if(lastRoom == roomInfo.num){
+                return;
+            }
+
+            damage  = 0;
+            healing = 0;
+            attacks = 0;
+
+            if(attacking > -1){
+                clearTarget();
+                stopAttack();
+            }
+
+            var exits = roomInfo.exits;
+            var found = false;
+
+            for(var direction in exits){
+                if(!exits.hasOwnProperty(direction)) continue;
+                if(exits[direction] == lastRoom){
+                    fleeDirection = direction;
+                    found = true;
+                    break;
+                }
+            }
+
+            if(!found && typeof roomInfo.ohmap == "undefined"){
+                kecho("###red###WARNING:###reset### No exit to flee found, reusing ###red###" + fleeDirection + "###reset###.")
+            }
+
+            lastRoom = roomInfo.num;
         };
 
         module.setGmcpTarget = function (target) {
