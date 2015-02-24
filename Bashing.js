@@ -231,7 +231,8 @@ var keneanung = (function (keneanung) {
                 if(gmcpStatusTarget != "None"){
                     for(var i = 0; i < roomContent.length; i++){
                         var cont = roomContent[i];
-                        if(cont.attrib.indexOf("m") > -1 && cont.name.toLowerCase().indexOf(gmcpStatusTarget) > -1){
+                        if(typeof cont.attrib != "undefined" && cont.attrib.indexOf("m") > -1
+                            && cont.name.toLowerCase().indexOf(gmcpStatusTarget) > -1){
                             targetList[targetList.length] = {
                                 id: cont.id,
                                 name: cont.name
