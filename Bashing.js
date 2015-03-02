@@ -358,7 +358,9 @@ var keneanung = (function (keneanung) {
         };
 
         module.statusCallback = function (status){
-            gmcpStatusTarget = status.target;
+            if(typeof status.target != "undefined"){
+                gmcpStatusTarget = status.target;
+            }
         };
 
         module.attackButton = function (){
