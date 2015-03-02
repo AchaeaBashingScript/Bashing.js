@@ -228,11 +228,11 @@ var keneanung = (function (keneanung) {
         var setTarget = function () {
             if (targetList.length == 0) {
                 var targetSet = false;
-                if(gmcpStatusTarget != "None"){
+                if(typeof gmcpStatusTarget != "undefined" && gmcpStatusTarget != "None"){
                     for(var i = 0; i < roomContent.length; i++){
                         var cont = roomContent[i];
                         if(typeof cont.attrib != "undefined" && cont.attrib.indexOf("m") > -1
-                            && cont.name.toLowerCase().indexOf(gmcpStatusTarget) > -1){
+                            && cont.name.toLowerCase().indexOf(gmcpStatusTarget.toLowerCase()) > -1){
                             targetList[targetList.length] = {
                                 id: cont.id,
                                 name: cont.name
@@ -244,6 +244,8 @@ var keneanung = (function (keneanung) {
                 if(!targetSet){
                     clearTarget();
                     stopAttack();
+                }else{
+                    attacking++;
                 }
             } else {
                 if (attacking == -1 || targetList[attacking].id != gmcpTargetId) {
@@ -347,7 +349,7 @@ var keneanung = (function (keneanung) {
             maxHealth = Number(vitals.maxhp);
             var difference = lastHealth - health;
             if (difference > 0) {
-                damage += health;
+                damage += difference;
             } else {
                 healing += Math.abs(difference);
             }
@@ -489,6 +491,11 @@ var keneanung = (function (keneanung) {
             }
 
             emitEventsIfChanged(before, after);
+        };
+
+        module.setFleeDirection = function(dir){
+            fleeDirection = dir;
+            kecho("Fleeing to the ##red##" + dir + "##reset##.")
         };
 
         module.showConfig = function () {
@@ -680,6 +687,9 @@ var keneanung = (function (keneanung) {
         load();
         send_direct("setalias keneanungki " + config.attackcommand);
         send_direct("setalias keneanungra " + config.razecommand);
+
+        bottom_button_set(2, "", "keneanung.bashing.attackcommand()", "Start attacking", false);
+        bottom_button_set(3, "", "keneanung.bashing.flee()", "Flee", false);
 
         return module;
 
