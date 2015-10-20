@@ -690,8 +690,22 @@ var keneanung = (function (keneanung) {
         send_direct("setalias keneanungki " + config.attackcommand);
         send_direct("setalias keneanungra " + config.razecommand);
 
-        bottom_button_set(2, "", "keneanung.bashing.attackcommand()", "Start attacking", false);
-        bottom_button_set(3, "", "keneanung.bashing.flee()", "Flee", false);
+        var buttonsDefined = false;
+
+        for(var buttonIndex in buttons){
+            if(buttons[buttonIndex] != null){
+                if(buttons[buttonIndex].script == "keneanung.bashing.attackButton()"){
+                    buttonsDefined = true;
+                    break;
+                }
+            }
+        }
+        
+        if(!buttonsDefined){
+            buttons_count = buttons_count + 2;
+            bottom_button_set(buttons_count - 1, "", "keneanung.bashing.attackButton()", "Start attacking", false);
+            bottom_button_set(buttons_count, "", "keneanung.bashing.flee()", "Flee", false);
+        }
 
         return module;
 
