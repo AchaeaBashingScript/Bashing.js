@@ -84,20 +84,17 @@ var keneanung = (function (keneanung) {
 
         var save = function () {
             //var configString = JSON.stringify(config);
-            if (!set_variable("keneanung.bashing.config", config)) {
-                kecho("##red##Couldn't save settings!");
+            set_variable("keneanung.bashing.config", config);
+            //make sure the changes get uploaded to IRE...
+            if (settings_window && settings_window.set_system_vals) {
+                settings_window.set_system_vals();
+                settings_window.system_changed = false;
+                client.system_changed = false;
+                gmcp_save_system();
             } else {
-                //make sure the changes get uploaded to IRE...
-                if (settings_window && settings_window.set_system_vals) {
-                    settings_window.set_system_vals();
-                    settings_window.system_changed = false;
-                    client.system_changed = false;
-                    gmcp_save_system();
-                } else {
-                    kecho("##yellow##No settings window open. Please open it " +
-                    "(cogwheels lower right side) and click on 'Save " +
-                    "Client Settings' to keep your config.");
-                }
+                kecho("##yellow##No settings window open. Please open it " +
+                "(cogwheels lower right side) and click on 'Save " +
+                "Client Settings' to keep your config.");
             }
         };
 
