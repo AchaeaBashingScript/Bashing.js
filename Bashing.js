@@ -259,14 +259,14 @@ var keneanung = (function (keneanung) {
 
         var startAttack = function () {
             if (attacking >= 0) {
-                var trigger = reflex_find_by_name("trigger", "keneanung.bashing.queueTrigger");
+                var trigger = reflex_find_by_name("trigger", "keneanung.bashing.queueTrigger", false, false, "Bashing");
                 reflex_enable(trigger);
                 send_direct("queue add eqbal keneanungki", false);
             }
         };
 
         var stopAttack = function () {
-            var trigger = reflex_find_by_name("trigger", "keneanung.bashing.queueTrigger");
+            reflex_find_by_name("trigger", "keneanung.bashing.queueTrigger", false, false, "Bashing");
             reflex_disable(trigger);
             send_direct("cq all");
             attacking = -1;
